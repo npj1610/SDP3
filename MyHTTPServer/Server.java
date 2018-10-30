@@ -51,7 +51,7 @@ class Server {
             }
         }
         
-        if (max_conexiones < 1) {
+        if (max_conexiones < 0) {
             System.err.println("Invalid number of conections.");
             return;
         }
@@ -59,5 +59,7 @@ class Server {
         System.out.println("Puerto: "+puerto);
         System.out.println("Carpeta: "+carpeta);
         System.out.println("Conexiones: "+max_conexiones);
+        ServerConcurrent server = new ServerConcurrent(puerto, carpeta, max_conexiones);
+        server.start();
     }
 }
