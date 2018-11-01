@@ -18,7 +18,7 @@ GOTO :EOF
 :MyHTTPServer
 echo.
 echo Compilando MyHTTPServer
-CALL :Compile javac MyHTTPServer/SocketHandling.java MyHTTPServer/ErrorHandling.java MyHTTPServer/ServerThread.java MyHTTPServer/ServerConcurrent.java MyHTTPServer/Server.java
+CALL :Compile javac Common/SocketHandling.java MyHTTPServer/ErrorHandling.java MyHTTPServer/ServerThread.java MyHTTPServer/ServerConcurrent.java MyHTTPServer/Server.java MyHTTPServer/StaticRecurses.java MyHTTPServer/DynamicRecurses.java
 GOTO :EOF
 
 :Compile

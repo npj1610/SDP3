@@ -5,12 +5,9 @@
  */
 package MyHTTPServer;
 
+import Common.SocketHandling;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -32,19 +29,31 @@ public class ServerThread extends Thread {
         this.carpeta = carpeta;
     }
     
+    private void delegateRequest (String file) {
+        if (file.matches("/controladorSD/.*")) {
+            DynamicRecurses.sendRequest(connection, file.substring(15));
+        } else {
+            StaticRecurses.sendFile(connection, carpeta.toString(), file);
+        }
+    }
+    
+    private void readRequest (String request) {
+        String[] lines = request.split("\n");
+        String[] stateLine = lines[0].split(" ");
+        System.out.println(lines[0]);
+        if(!stateLine[0].equals("GET")) {
+            SocketHandling.escribeSocket(connection, ErrorHandling.error405());
+        } else {
+            delegateRequest(stateLine[1]);
+        }
+        
+    }
+    
     @Override
     public void run() {
-        System.out.println(SocketHandling.leeSocket(connection));
-        System.out.println("Stage2");
-        SocketHandling.escribeSocket(connection,
-                "HTTP/1.1 200 OK\n"
-               +"Connection: close\n"
-               +"Content-Length: 4\n"
-               +"Content-Type: text/html; charset=utf-8\n"
-               +"Server: Practica 3 SD\n\n"
-               +"hola"
-        );
-        System.out.println("Stage3");
+        String request = SocketHandling.leeSocket(connection);
+        //System.out.println(request);
+        readRequest(request);
         threads.release();
     }
 }

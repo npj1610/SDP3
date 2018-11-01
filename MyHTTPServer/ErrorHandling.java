@@ -11,24 +11,35 @@ package MyHTTPServer;
  */
 public class ErrorHandling {
     public static String error405 () {
-        return "HTTP/1.1 405 Method Not Allowed\n"
-               +"Connection: close\n"
-               +"Content-Type: text/plain"
-               +"Content-Length: 19"
-               +"Allow: GET\n"
-               +"Server: Practica 3 SD\n\n"
-               +"Method Not Allowed."
+        return "HTTP/1.1 405 Method Not Allowed\r\n"
+               +"Connection: close\r\n"
+               +"Content-Type: text/plain\r\n"
+               +"Content-Length: 20\r\n"
+               +"Allow: GET\r\n"
+               +"Server: Practica 3 SD\r\n\r\n"
+               +"Method Not Allowed.\n"
                 ;
     }
     
     
     public static String error503 () {
-        return "HTTP/1.1 503 Service Unavailable\n"
-               +"Connection: close\n"
-               +"Content-Type: text/plain"
-               +"Content-Length: 62"
-               +"Server: Practica 3 SD\n\n"
-               +"Maximum number of connections reached. Please try again later."
+        return "HTTP/1.1 503 Service Unavailable\r\n"
+               +"Connection: close\r\n"
+               +"Content-Type: text/plain\r\n"
+               +"Content-Length: 63\r\n"
+               +"Server: Practica 3 SD\r\n\r\n"
+               +"Maximum number of connections reached. Please try again later.\n"
+                ;
+    }
+    
+    
+    public static String error404 () {
+        return "HTTP/1.1 404 Not Found\r\n"
+               +"Connection: close\r\n"
+               +"Content-Type: text/plain\r\n"
+               +"Content-Length: 16\r\n"
+               +"Server: Practica 3 SD\r\n\r\n"
+               +"File not found.\n"
                 ;
     }
     

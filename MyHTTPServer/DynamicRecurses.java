@@ -5,10 +5,18 @@
  */
 package MyHTTPServer;
 
+import Common.SocketHandling;
+import java.net.Socket;
+
 /**
  *
  * @author Niko
  */
 public class DynamicRecurses {
+    
+    public static void sendRequest(Socket connection, String request) {
+        System.out.println(request);
+        SocketHandling.escribeSocket(connection, ErrorHandling.error404());
+    }
     
 }

@@ -5,6 +5,7 @@
  */
 package MyHTTPServer;
 
+import Common.SocketHandling;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -39,7 +40,7 @@ public class ServerConcurrent {
                 if (threads.tryAcquire()) {
                     Thread t = new ServerThread(threads, connection, carpeta);
                     t.start();
-                    System.out.println("Peticion servida");
+                    System.out.println("\nPeticion servida");
                 } else {
                     SocketHandling.escribeSocket(connection, ErrorHandling.error503());
                     System.out.println("Peticion rechazada");
