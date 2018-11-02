@@ -16,22 +16,27 @@ import java.util.concurrent.Semaphore;
  */
 public class ServerThread extends Thread {
     
-    Semaphore threads;
-    Socket connection;
-    File carpeta;
+    private final Semaphore threads;
+    private final Socket connection;
+    private final String controlador;
+    private final int puertoControlador;
+    private final File carpeta;
+    
     
 
     
     
-    public ServerThread (Semaphore sempahore, Socket socket, File carpeta) {
+    public ServerThread (Semaphore sempahore, Socket socket, String controller, int controllerPort, File folder) {
         threads = sempahore;
         connection = socket;
-        this.carpeta = carpeta;
+        controlador = controller;
+        puertoControlador = controllerPort;
+        this.carpeta = folder;
     }
     
     private void delegateRequest (String file) {
         if (file.matches("/controladorSD/.*")) {
-            DynamicRecurses.sendRequest(connection, file.substring(15));
+            DynamicRecurses.sendRequest(connection, controlador, puertoControlador, file.substring(15));
         } else {
             StaticRecurses.sendFile(connection, carpeta.toString(), file);
         }
@@ -51,9 +56,7 @@ public class ServerThread extends Thread {
     
     @Override
     public void run() {
-        String request = SocketHandling.leeSocket(connection);
-        //System.out.println(request);
-        readRequest(request);
+        readRequest(SocketHandling.leeSocket(connection));
         threads.release();
     }
 }

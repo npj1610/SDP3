@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MyHTTPServer;
+package Controller;
 
 import Common.SocketHandling;
-import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,24 +15,21 @@ import java.util.concurrent.Semaphore;
  *
  * @author Niko
  */
-public class ServerConcurrent {
+public class ControllerConcurrent {
     
     private final int puerto;
-    private final String controlador;
-    private final int puertoControlador;
-    private final File carpeta;
+    private final String registro;
+    private final int puertoRegistro;
     private final int max_conexiones;
-
-    public ServerConcurrent(int port, String controller, int controllerPort, File folder, int max_connections) {
+    
+    public ControllerConcurrent(int port, String registry, int registryPort, int max_connections) {
         puerto = port;
-        carpeta = folder;
+        registro = registry;
+        puertoRegistro = registryPort;
         max_conexiones = max_connections;
-        controlador = controller;
-        puertoControlador = controllerPort;
     }
     
     public void start() {
-        //Socket thingies
         try {
             ServerSocket socket = new ServerSocket(puerto);
             System.out.println("Escuchando en puerto "+puerto+"...");
@@ -42,11 +38,11 @@ public class ServerConcurrent {
             while(true) {
                 Socket connection = socket.accept();
                 if (threads.tryAcquire()) {
-                    Thread t = new ServerThread(threads, connection, controlador, puertoControlador, carpeta);
+                    Thread t = new ControllerThread(threads, connection, registro, puertoRegistro);
                     t.start();
                     System.out.println("\nPeticion servida");
                 } else {
-                    SocketHandling.escribeSocket(connection, ErrorHandling.error503());
+                    SocketHandling.escribeSocket(connection, "503");
                     System.out.println("Peticion rechazada");
                 }
             }
