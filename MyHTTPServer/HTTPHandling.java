@@ -9,7 +9,7 @@ package MyHTTPServer;
  *
  * @author Niko
  */
-public class ErrorHandling {
+public class HTTPHandling {
     public static String error405 () {
         return "HTTP/1.1 405 Method Not Allowed\r\n"
                +"Connection: close\r\n"
@@ -41,6 +41,27 @@ public class ErrorHandling {
                +"Server: Practica 3 SD\r\n\r\n"
                +"File not found.\n"
                 ;
+    }
+    
+    public static String error400 () {
+        return "HTTP/1.1 400 Bad Request\r\n"
+               +"Connection: close\r\n"
+               +"Content-Type: text/plain\r\n"
+               +"Content-Length: 13\r\n"
+               +"Allow: GET\r\n"
+               +"Server: Practica 3 SD\r\n\r\n"
+               +"Bad Request.\n"
+                ;
+    }
+
+    public static String HTTPFormat(String message) {
+        return
+                "HTTP/1.1 200 OK\r\n"
+            +   "Connection: close\r\n"
+            +   "Content-Length: " + message.length() + "\r\n"
+            +   "Content-Type: text/html; charset=utf-8\r\n"
+            +   "Server: Practica 3 SD\r\n\r\n"
+            +   message;
     }
     
 }

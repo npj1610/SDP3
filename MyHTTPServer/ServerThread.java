@@ -47,7 +47,7 @@ public class ServerThread extends Thread {
         String[] stateLine = lines[0].split(" ");
         System.out.println(lines[0]);
         if(!stateLine[0].equals("GET")) {
-            SocketHandling.escribeSocket(connection, ErrorHandling.error405());
+            SocketHandling.escribeSocket(connection, HTTPHandling.error405());
         } else {
             delegateRequest(stateLine[1]);
         }

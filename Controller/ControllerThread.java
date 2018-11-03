@@ -7,7 +7,10 @@ package Controller;
 
 import Common.RMIStationInterface;
 import Common.SocketHandling;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
@@ -71,7 +74,7 @@ public class ControllerThread extends Thread {
                     }
                 case "pantalla":
                     if (write) {
-                        if(station.setPantalla(value)) {
+                        if(station.setPantalla(URLDecoder.decode(value, StandardCharsets.US_ASCII.name()))) {
                             return "200";
                         } else {
                             return "503";
@@ -82,7 +85,7 @@ public class ControllerThread extends Thread {
                 default:
                     return "400";
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | UnsupportedEncodingException e) {
             System.err.println("Error communicating with station:");
             System.err.println(e);
             return "404";

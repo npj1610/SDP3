@@ -27,7 +27,7 @@ public class RMIStation extends UnicastRemoteObject implements Serializable, RMI
             String temp;
             String out = "";
             while ((temp = br.readLine()) != null) {
-                out += temp;
+                out += temp+"\n";
             }
             String[] tokens = out.split("\n");
             temperatura = Integer.parseInt(tokens[0].substring(12));
@@ -108,9 +108,9 @@ public class RMIStation extends UnicastRemoteObject implements Serializable, RMI
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(station.toString()));) {
                 
                 writer.write(
-                        "Temperatura="+temperatura+"\n" +
-                        "Humedad="+humedad+"\n" +
-                        "Luminosidad="+luminosidad+"\n" +
+                        "Temperatura="+temperatura+"\r\n" +
+                        "Humedad="+humedad+"\r\n" +
+                        "Luminosidad="+luminosidad+"\r\n" +
                         "Pantalla="+pantalla
                 );
                 writer.close();

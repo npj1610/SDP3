@@ -46,7 +46,7 @@ public class ServerConcurrent {
                     t.start();
                     System.out.println("\nPeticion servida");
                 } else {
-                    SocketHandling.escribeSocket(connection, ErrorHandling.error503());
+                    SocketHandling.escribeSocket(connection, HTTPHandling.error503());
                     System.out.println("Peticion rechazada");
                 }
             }

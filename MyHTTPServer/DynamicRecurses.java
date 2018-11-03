@@ -16,25 +16,55 @@ import java.io.IOException;
  */
 public class DynamicRecurses {
     
+    private static void readResponse(Socket connection, String response) {
+        String code = response.substring(0,3);
+        switch (code) {
+            case "200":
+                SocketHandling.escribeSocket(connection, HTTPHandling.HTTPFormat(response.substring(3)));
+                break;
+                
+            case "400":
+                SocketHandling.escribeSocket(connection, HTTPHandling.error400());
+                break;
+            
+            case "404":
+                SocketHandling.escribeSocket(connection, HTTPHandling.error404());
+                break;
+            
+            case "503":
+                SocketHandling.escribeSocket(connection, HTTPHandling.error503());
+                break;
+                
+            default:
+                SocketHandling.escribeSocket(connection, HTTPHandling.error404());
+                break;
+                
+        }
+    }
+    
     public static void sendRequest(Socket connection, String controller, int controllerPort, String request) {
         System.out.println(request);
         
-        String[] datos = request.split("\\?");
+        String[] tokens1 = request.split("\\?");
         
-        String message = datos[0]+"\n";
-        datos = datos[1].split("&");
-        for(int i=1; i<datos.length; i++) {
-            message += datos[i].split("=")[0] + "\n" + datos[i].split("=")[1] + "\n";
+        String message = tokens1[0]+"\n";
+        
+        String[] tokens2 = tokens1[1].split("&");
+        
+        for(String token : tokens2) {
+            message += token.split("=")[0] + "\n" + token.split("=")[1] + "\n";
         }
         
         try (Socket controlador = new Socket(controller, controllerPort)) {
             SocketHandling.escribeSocket(controlador, message);
+            System.out.println(message);
+            readResponse(connection, SocketHandling.leeSocket(controlador));
         } catch (UnknownHostException e) {
             System.err.println("Controlador no encontrado.");
-            SocketHandling.escribeSocket(connection, ErrorHandling.error404());
+            SocketHandling.escribeSocket(connection, HTTPHandling.error404());
         } catch (IOException e) {
             System.err.println("Error contactando con controlador.");
-            SocketHandling.escribeSocket(connection, ErrorHandling.error404());
+            SocketHandling.escribeSocket(connection, HTTPHandling.error404());
         }
         
     }

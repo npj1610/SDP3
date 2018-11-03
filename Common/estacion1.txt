@@ -1,4 +1,4 @@
 Temperatura=30
-Humedad=90
+Humedad=120
 Luminosidad=450
-Pantalla=Hola, esta es la practica de SD
+Pantalla=JAJA, SI, SOY YO EL RMI STATION
