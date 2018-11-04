@@ -1,4 +1,4 @@
-Temperatura=30
+Temperatura=49
 Humedad=120
 Luminosidad=450
 Pantalla=JAJA, SI, SOY YO EL RMI STATION

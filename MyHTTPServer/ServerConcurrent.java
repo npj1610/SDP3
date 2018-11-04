@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Semaphore;
+import java.net.BindException;
 
 /**
  *
@@ -50,6 +51,9 @@ public class ServerConcurrent {
                     System.out.println("Peticion rechazada");
                 }
             }
+        } catch (BindException e) {
+            System.err.println(e);
+            System.err.println("(Is other app using any of your ports? Are you using a port under 1024 without root privileges?)");
         } catch (IOException e) {
             System.err.println(e);
         }

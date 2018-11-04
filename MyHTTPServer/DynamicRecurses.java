@@ -9,6 +9,7 @@ import Common.SocketHandling;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.io.IOException;
+import java.net.BindException;
 
 /**
  *
@@ -59,6 +60,9 @@ public class DynamicRecurses {
             SocketHandling.escribeSocket(controlador, message);
             System.out.println(message);
             readResponse(connection, SocketHandling.leeSocket(controlador));
+        } catch (BindException e) {
+            System.err.println(e);
+            System.err.println("(Is other app using any of your ports? Are you using a port under 1024 without root privileges?)");
         } catch (UnknownHostException e) {
             System.err.println("Controlador no encontrado.");
             SocketHandling.escribeSocket(connection, HTTPHandling.error404());
