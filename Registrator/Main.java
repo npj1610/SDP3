@@ -20,14 +20,22 @@ public class Main {
     
     private static void usage() {
         System.err.println("Usage:\n");
-        System.err.println("java Registrator.Main [RegistryPort]\n");
+        System.err.println("java Registrator.Main ExternalRegistryIP [RegistryPort]\n");
         System.err.println("\tRegistryPort default value: "+DEF_PORT);
     }
     
     public static void main(String[] args) {
         int port = DEF_PORT;
+        String ip;
         try {
-            port = Integer.parseInt(args[0]);
+            ip = args[0];
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("Invalid arguments.\n");
+            usage();
+            return;
+        }
+        try {
+            port = Integer.parseInt(args[1]);
         } catch (IndexOutOfBoundsException e) {
         } catch (NumberFormatException e) {
             System.err.println("Invalid arguments.\n");
@@ -35,6 +43,9 @@ public class Main {
             return;
         }
         
+        System.setProperty("java.rmi.server.hostname", ip);
+        
+        System.out.println("External registry IP: "+ip);
         System.out.println("Puerto: "+port);
         
         try {

@@ -78,9 +78,8 @@ public class Main {
         
         try {
             registrator = (RegistratorInterface) registry.lookup("/Registrator");
-            registrator.setIP(registro);
         } catch (RemoteException | NotBoundException e) {
-            System.err.println("AError connecting with registrator:");
+            System.err.println("Error connecting with registrator:");
             System.err.println(e);
             return;
         }

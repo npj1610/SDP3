@@ -30,11 +30,6 @@ public class Registrator extends UnicastRemoteObject implements Serializable, Re
     }
     
     @Override
-    public void setIP (String ipRegistry) {
-        System.setProperty("java.rmi.server.hostname",ipRegistry);
-    }
-    
-    @Override
     public boolean registrar(RMIStationInterface RMIStation) throws RemoteException {
         String rmiName;
         try {
