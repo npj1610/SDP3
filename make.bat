@@ -50,7 +50,10 @@ GOTO:EOF
 :Clean
 echo.
 echo Limpiando
-FOR /R %%A IN (*.class) DO del "%%A"
+FOR /R %%A IN (*.class) DO (
+    echo del "%%A"
+    del "%%A"
+)
 echo.
 GOTO:EOF
 
