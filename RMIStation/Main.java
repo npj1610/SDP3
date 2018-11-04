@@ -94,7 +94,7 @@ public class Main {
         //Register RMI
         try {
             RMIStationInterface rmiStation = new RMIStation(nombre, station);
-            if(!registrator.registrar(rmiStation)) {
+            if(!registrator.registrar(registro, rmiStation)) {
                 throw new RemoteException("Registrator returned false.");
             }
         } catch (RemoteException e) {
