@@ -6,7 +6,7 @@ public class Main {
     private static void usage() {
         System.err.println("Usage:\n");
         System.err.println("java Controller.Main PortNumber RegistryIP RegistryPort [MaxConnections]\n");
-        System.err.println("\tMaxConnections default value: "+DEF_MAX_CONEXIONES);
+        System.err.println("\tMaxConnections default value: "+DEF_MAX_CONEXIONES+"\n");
     }
     
     public static void main(String[] args){
@@ -20,7 +20,7 @@ public class Main {
             registro = args[1];
             puertoRegistro = Integer.parseInt(args[2]);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            System.err.println("Invalid arguments.\n");
+            System.err.println("Invalid arguments.");
             usage();
             return;
         }
@@ -41,14 +41,14 @@ public class Main {
         }
         
         if (max_conexiones < 0) {
-            System.err.println("Invalid number of conections.");
+            System.err.println("Invalid number of conections.\n");
             return;
         }
         
         System.out.println("Puerto: "+puerto);
         System.out.println("Controlador: "+registro);
         System.out.println("Puero controlador: "+puertoRegistro);
-        System.out.println("Conexiones: "+max_conexiones);
+        System.out.println("Conexiones: "+max_conexiones+"\n");
         ControllerConcurrent server = new ControllerConcurrent(puerto, registro, puertoRegistro, max_conexiones);
         server.start();
     }

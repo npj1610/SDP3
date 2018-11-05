@@ -5,67 +5,71 @@ import java.io.File;
 
 class Main {
     
-    private final static int DEF_MAX_CONEXIONES = 10;
-    private final static String DEF_CARPETA = "http";
+    private final static int DEF_MAX_CONNECTIONS = 10;
+    private final static String DEF_FOLDER = "http";
     private final static String CURRENT_FOLDER = System.getProperty("user.dir");
     
     private static void usage() {
         System.err.println("Usage:\n");
-        System.err.println("java MyHTTPServer.Main PortNumber ControllerIP ControllerPort [Folder MaxConnections]\n");
-        System.err.println("\tFolder default value: "+DEF_CARPETA);
-        System.err.println("\tMaxConnections default value: "+DEF_MAX_CONEXIONES);
+        System.err.println("java MyHTTPServer.Main PortNumber ControllerIP ControllerPort [MaxConnections]\n");
+        System.err.println("\tMaxConnections default value: "+DEF_MAX_CONNECTIONS+"\n");
     }
     
     public static void main(String[] args){
-        int puerto;
-        String controlador;
-        int puertoControlador;
-        File carpeta;
-        int max_conexiones = DEF_MAX_CONEXIONES;
+        int port;
+        String controller;
+        int controllerPort;
+        File folder;
+        int max_connections = DEF_MAX_CONNECTIONS;
         
+        //Set server port, controller IP and controller port
         try {
-            puerto = Integer.parseInt(args[0]);
-            controlador = args[1];
-            puertoControlador = Integer.parseInt(args[2]);
+            port = Integer.parseInt(args[0]);
+            controller = args[1];
+            controllerPort = Integer.parseInt(args[2]);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             System.err.println("Invalid arguments.\n");
             usage();
             return;
         }
         
-        if (puerto < 0 || puertoControlador<0) {
-            System.err.println("Invalid port number.");
+        if (port < 0 || controllerPort<0) {
+            System.err.println("Invalid port number.\n");
             return;
         }
         
-        carpeta = new File(CURRENT_FOLDER+"/"+(3 < args.length?args[3]:DEF_CARPETA));
-        
-        if (!carpeta.exists() || !carpeta.isDirectory()) {
-            System.err.println("Folder "+carpeta+" does not exist.");
+        //Set server folder
+        folder = new File(CURRENT_FOLDER+"/"+DEF_FOLDER);
+        if (!folder.exists() || !folder.isDirectory()) {
+            System.err.println("Folder "+folder+" does not exist.\n");
             return;
         }
         
-        if (4 < args.length) {
+        //Set maximum connection number
+        if (3 < args.length) {
             try {
-                max_conexiones = Integer.parseInt(args[4]);
+                max_connections = Integer.parseInt(args[3]);
             } catch (NumberFormatException e) {
-                System.err.println(e);
+                System.err.println(e+"\n");
                 usage();
                 return;
             }
         }
         
-        if (max_conexiones < 0) {
-            System.err.println("Invalid number of conections.");
+        if (max_connections < 0) {
+            System.err.println("Invalid number of conections.\n");
             return;
         }
         
-        System.out.println("Puerto: "+puerto);
-        System.out.println("Controlador: "+controlador);
-        System.out.println("Puero controlador: "+puertoControlador);
-        System.out.println("Carpeta: "+carpeta);
-        System.out.println("Conexiones: "+max_conexiones);
-        ServerConcurrent server = new ServerConcurrent(puerto, controlador, puertoControlador, carpeta, max_conexiones);
+        //Print info
+        System.out.println("Server Port: "+port);
+        System.out.println("Controller IP: "+controller);
+        System.out.println("Controller Port: "+controllerPort);
+        System.out.println("Folder: "+folder);
+        System.out.println("Maximum Connection Number: "+max_connections+"\n");
+        
+        //Start server
+        ServerConcurrent server = new ServerConcurrent(port, controller, controllerPort, folder.toString(), max_connections);
         server.start();
     }
 }

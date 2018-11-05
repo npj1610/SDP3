@@ -17,46 +17,56 @@ import java.util.concurrent.Semaphore;
 public class ServerThread extends Thread {
     
     private final Semaphore threads;
-    private final Socket connection;
-    private final String controlador;
-    private final int puertoControlador;
-    private final File carpeta;
+    private final Socket guestConnection;
+    private final String controllerIP;
+    private final int controllerPort;
+    private final String folder;
     
-    
-
-    
-    
-    public ServerThread (Semaphore sempahore, Socket socket, String controller, int controllerPort, File folder) {
-        threads = sempahore;
-        connection = socket;
-        controlador = controller;
-        puertoControlador = controllerPort;
-        this.carpeta = folder;
+    public ServerThread (Semaphore hilos, Socket conexionCliente, String ipControlador, int puertoControlador, String carpeta) {
+        threads = hilos;
+        guestConnection = conexionCliente;
+        controllerIP = ipControlador;
+        controllerPort = puertoControlador;
+        folder = carpeta;
     }
     
-    private void delegateRequest (String file) {
-        if (file.matches("/controladorSD/.*")) {
-            DynamicRecurses.sendRequest(connection, controlador, puertoControlador, file.substring(15));
+    private void delegateGETRequest (String resource) {
+        if (resource.matches("/controladorSD/.*")) {
+            DynamicRecurses.sendRequest(guestConnection, controllerIP, controllerPort, resource.substring(15));
         } else {
-            StaticRecurses.sendFile(connection, carpeta.toString(), file);
+            StaticRecurses.sendFile(guestConnection, folder, resource);
         }
     }
     
     private void readRequest (String request) {
         String[] lines = request.split("\n");
         String[] stateLine = lines[0].split(" ");
-        System.out.println(lines[0]);
-        if(!stateLine[0].equals("GET")) {
-            SocketHandling.escribeSocket(connection, HTTPHandling.error405());
-        } else {
-            delegateRequest(stateLine[1]);
+        
+        //Show info
+        System.out.println("Request: ");
+        System.out.println(lines[0]+"\n");
+        
+        //Handle request type
+        try {
+            switch (stateLine[0]) {
+                case "GET":
+                    delegateGETRequest(stateLine[1]);
+                    break;
+                default:
+                    SocketHandling.escribeSocket(guestConnection, HTTPHandling.error405());
+                    break;
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("Bad request: wrong format.");
+            System.err.println(e+"\n");
+            SocketHandling.escribeSocket(guestConnection, HTTPHandling.error400());
         }
         
     }
     
     @Override
     public void run() {
-        readRequest(SocketHandling.leeSocket(connection));
+        readRequest(SocketHandling.leeSocket(guestConnection));
         threads.release();
     }
 }

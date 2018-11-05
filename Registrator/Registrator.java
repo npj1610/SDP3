@@ -37,11 +37,11 @@ public class Registrator extends UnicastRemoteObject implements Serializable, Re
             rmiName = RMIStation.getName();
             registry.rebind("/"+rmiName, RMIStation);
         } catch (RemoteException e) {
-            System.err.println(e);
+            System.err.println(e+"\n");
             return false;
         }
         
-        System.out.println("Registered: /" + rmiName);
+        System.out.println("Registered: /"+rmiName+"\n");
         return true;
     }
 }

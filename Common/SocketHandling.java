@@ -18,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 public class SocketHandling {
         public static String leeSocket(Socket connection) {
         try {
-            
             String result = "";
             while(result.equals("")) {
                 InputStream is = connection.getInputStream();
@@ -28,7 +27,7 @@ public class SocketHandling {
             }
             return result;
         } catch (IOException e) {
-            System.err.println(e);
+            System.err.println(e+"\n");
             return "";
         }
    }
@@ -43,7 +42,7 @@ public class SocketHandling {
             os.write(datos);
             os.flush();
         } catch (IOException e) {
-           System.err.println(e);
+           System.err.println(e+"\n");
         }
     }
 }

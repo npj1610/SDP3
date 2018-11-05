@@ -20,6 +20,12 @@ public class RMIStation extends UnicastRemoteObject implements Serializable, RMI
     int luminosidad = 0;
     String pantalla = "";
     
+    public RMIStation(String string, File file) throws RemoteException {
+        name = string;
+        station = file;
+        
+    }
+    
     private void actualizar() {
           try (FileReader in = new FileReader(station)) {
             BufferedReader br = new BufferedReader(in);
@@ -29,6 +35,7 @@ public class RMIStation extends UnicastRemoteObject implements Serializable, RMI
             while ((temp = br.readLine()) != null) {
                 out += temp+"\n";
             }
+            
             String[] tokens = out.split("\n");
             temperatura = Integer.parseInt(tokens[0].substring(12));
             humedad = Integer.parseInt(tokens[1].substring(8));
@@ -39,15 +46,33 @@ public class RMIStation extends UnicastRemoteObject implements Serializable, RMI
                 pantalla += "\n"+tokens[i];
             }
         } catch (IOException e) {
-            System.err.println("Error accesing the data");
-            System.err.println(e);
+            System.err.println("Error accesing the data:");
+            System.err.println(e+"\n");
         }
     }
     
-    public RMIStation(String string, File file) throws RemoteException {
-        name = string;
-        station = file;
-        
+    private boolean escribir() {
+        boolean out = true;
+        if(station.delete()) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(station.toString()));) {
+                
+                writer.write(
+                        "Temperatura="+temperatura+"\r\n" +
+                        "Humedad="+humedad+"\r\n" +
+                        "Luminosidad="+luminosidad+"\r\n" +
+                        "Pantalla="+pantalla
+                );
+                writer.close();
+                
+            } catch (IOException e) {
+                System.err.println("Error trying to change file:");
+                System.err.println(e+"\n");
+                out = false;
+            }
+        } else {
+            out = false;
+        }
+        return out;
     }
     
     @Override
@@ -101,31 +126,7 @@ public class RMIStation extends UnicastRemoteObject implements Serializable, RMI
         this.pantalla = pantalla;
         return escribir();
     }
-    
-    private boolean escribir() {
-        boolean out = true;
-        if(station.delete()) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(station.toString()));) {
-                
-                writer.write(
-                        "Temperatura="+temperatura+"\r\n" +
-                        "Humedad="+humedad+"\r\n" +
-                        "Luminosidad="+luminosidad+"\r\n" +
-                        "Pantalla="+pantalla
-                );
-                writer.close();
-                
-            } catch (IOException e) {
-                System.err.println("Error trying to change file:");
-                System.err.println(e);
-                out = false;
-            }
-        } else {
-            out = false;
-        }
-        return out;
-    }
-    
+
     @Override
     public String getName() throws RemoteException {
         return name;

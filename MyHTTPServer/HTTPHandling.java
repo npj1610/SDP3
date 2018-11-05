@@ -48,13 +48,22 @@ public class HTTPHandling {
                +"Connection: close\r\n"
                +"Content-Type: text/plain\r\n"
                +"Content-Length: 13\r\n"
-               +"Allow: GET\r\n"
                +"Server: Practica 3 SD\r\n\r\n"
                +"Bad Request.\n"
                 ;
     }
+    
+    public static String error415 () {
+        return "HTTP/1.1 415 Unsupported Media Type\r\n"
+               +"Connection: close\r\n"
+               +"Content-Type: text/plain\r\n"
+               +"Content-Length: 24\r\n"
+               +"Server: Practica 3 SD\r\n\r\n"
+               +"Unsupported Media Type.\n"
+                ;
+    }
 
-    public static String HTTPFormat(String message) {
+    public static String HTTPFormatText(String message) {
         return
                 "HTTP/1.1 200 OK\r\n"
             +   "Connection: close\r\n"
@@ -63,5 +72,6 @@ public class HTTPHandling {
             +   "Server: Practica 3 SD\r\n\r\n"
             +   message;
     }
+    
     
 }

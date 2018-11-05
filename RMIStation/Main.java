@@ -61,18 +61,20 @@ public class Main {
         System.out.println("Archivo: "+station);
         System.out.println("Nombre: "+nombre);
         System.out.println("Registro: "+registro);
-        System.out.println("Puerto registro: "+puerto);
+        System.out.println("Puerto registro: "+puerto+"\n");
         
-        //Connect with registrator
+        
+        
         System.setSecurityManager(new RMISecurityManager());
         Registry registry;
         RegistratorInterface registrator;
         
+        //Connect with registrator
         try {
             registry = LocateRegistry.getRegistry(registro, puerto);
         } catch (RemoteException e) {
             System.err.println("Error connecting with registry:");
-            System.err.println(e);
+            System.err.println(e+"\n");
             return;
         }
         
@@ -80,14 +82,14 @@ public class Main {
             registrator = (RegistratorInterface) registry.lookup("/Registrator");
         } catch (RemoteException | NotBoundException e) {
             System.err.println("Error connecting with registrator:");
-            System.err.println(e);
+            System.err.println(e+"\n");
             return;
         }
         
         //Check if already bound
         try {
             registry.lookup("/"+nombre);
-            System.err.println("Name "+nombre+" already bound.");
+            System.err.println("Name "+nombre+" already bound.\n");
             return;
         } catch (RemoteException | NotBoundException e) {}
         
@@ -95,15 +97,15 @@ public class Main {
         try {
             RMIStationInterface rmiStation = new RMIStation(nombre, station);
             if(!registrator.registrar(rmiStation)) {
-                throw new RemoteException("Registrator returned false.");
+                throw new RemoteException("Registrator returned false.\n");
             }
         } catch (RemoteException e) {
             System.err.println("Error connecting with registrator:");
-            System.err.println(e);
+            System.err.println(e+"\n");
             return;
         }
         
-        System.err.println("MATAME");
+        System.err.println("Registrada\n");
     }
     
 }

@@ -21,24 +21,26 @@ public class Main {
     private static void usage() {
         System.err.println("Usage:\n");
         System.err.println("java Registrator.Main ExternalRegistryIP [RegistryPort]\n");
-        System.err.println("\tRegistryPort default value: "+DEF_PORT);
+        System.err.println("\tRegistryPort default value: "+DEF_PORT+"\n");
     }
     
     public static void main(String[] args) {
         int port = DEF_PORT;
         String ip;
+        
         try {
             ip = args[0];
         } catch (IndexOutOfBoundsException e) {
-            System.err.println("Invalid arguments.\n");
+            System.err.println("Invalid arguments.");
             usage();
             return;
         }
+        
         try {
             port = Integer.parseInt(args[1]);
         } catch (IndexOutOfBoundsException e) {
         } catch (NumberFormatException e) {
-            System.err.println("Invalid arguments.\n");
+            System.err.println("Invalid arguments.");
             usage();
             return;
         }
@@ -46,16 +48,16 @@ public class Main {
         System.setProperty("java.rmi.server.hostname", ip);
         
         System.out.println("External registry IP: "+ip);
-        System.out.println("Puerto: "+port);
+        System.out.println("Puerto: "+port+"\n");
         
         try {
             Registry registry = LocateRegistry.getRegistry("localhost", port);
             System.setSecurityManager(new RMISecurityManager());
             registry.rebind("/Registrator", new Registrator(registry));
-            System.out.println("Servidor de objeto preparado.");
+            System.out.println("Servidor de objeto preparado.\n");
         } catch (RemoteException e) {
             System.err.println("Error connecting with registry:");
-            System.err.println(e);
+            System.err.println(e+"\n");
         }
     }
     
