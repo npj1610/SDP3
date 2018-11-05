@@ -137,7 +137,6 @@ public class ControllerThread extends Thread {
         } catch (RemoteException | NotBoundException e) {
             System.err.println("Error connecting with Registrator:");
             System.err.println(e+"\n");
-            e.printStackTrace();
             return "404";
         }
         
