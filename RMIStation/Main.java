@@ -47,7 +47,7 @@ public class Main {
         
     private static void usage() {
         System.err.println("Usage:\n");
-        System.err.println("java RMIStation.Main StationFile Registry RegistryPort\n");
+        System.err.println("java RMIStation.Main StationFile Registry RegistryPort ExternalIP \n");
     }
     
     public static void main(String[] args) {
@@ -56,16 +56,20 @@ public class Main {
         String nombre;
         String registro;
         int puerto;
+	String externalIP;
         
         try {
             station = new File(CURRENT_FOLDER+"/"+args[0]);
             registro = args[1];
             puerto = Integer.parseInt(args[2]);
+		externalIP = args[3];
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             System.err.println("Invalid arguments.\n");
             usage();
             return;
         }
+
+        System.setProperty("java.rmi.server.hostname", externalIP);
         
         if (puerto < 0) {
             System.err.println("Invalid port number.");
