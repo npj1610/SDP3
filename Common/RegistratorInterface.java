@@ -14,5 +14,7 @@ import java.rmi.RemoteException;
  */
 public interface RegistratorInterface extends Remote {
     public boolean registrar(RMIStationInterface RMIStation) throws RemoteException;
+    public String listRMIs() throws RemoteException;
+    public void desregistrar(RMIStationInterface RMIStation) throws RemoteException;
     //Falta devolver todas las estaciones
 }

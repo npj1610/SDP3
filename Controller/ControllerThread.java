@@ -6,6 +6,7 @@
 package Controller;
 
 import Common.RMIStationInterface;
+import Common.RegistratorInterface;
 import Common.SocketHandling;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
@@ -87,7 +88,7 @@ public class ControllerThread extends Thread {
             }
         } catch (RemoteException | UnsupportedEncodingException e) {
             System.err.println("Error communicating with station:");
-            System.err.println(e);
+            System.err.println(e+"\n");
             return "404";
         }
     }
@@ -101,7 +102,7 @@ public class ControllerThread extends Thread {
             registry = LocateRegistry.getRegistry(registro, puertoRegistro);
         } catch (RemoteException e) {
             System.err.println("Error connecting with registry:");
-            System.err.println(e);
+            System.err.println(e+"\n");
             return "503";
         }
         
@@ -109,17 +110,44 @@ public class ControllerThread extends Thread {
             station = (RMIStationInterface) registry.lookup("/estacion"+stationNumber);
         } catch (RemoteException | NotBoundException e) {
             System.err.println("Error connecting with station:");
-            System.err.println(e);
+            System.err.println(e+"\n");
             return "404";
         }
         
         return askStation(station, attribute, value, write);
     }
     
+    private String askIndex() {
+        System.setSecurityManager(new RMISecurityManager());
+        Registry registry;
+        RegistratorInterface registrator;
+        String out;
+        
+        try {
+            registry = LocateRegistry.getRegistry(registro, puertoRegistro);
+        } catch (RemoteException e) {
+            System.err.println("Error connecting with registry:");
+            System.err.println(e+"\n");
+            return "503";
+        }
+        
+        try {
+            registrator = (RegistratorInterface) registry.lookup("/Registrator");
+            out = registrator.listRMIs();
+        } catch (RemoteException | NotBoundException e) {
+            System.err.println("Error connecting with Registrator:");
+            System.err.println(e+"\n");
+            e.printStackTrace();
+            return "404";
+        }
+        
+        return "200"+out;
+    }
+    
     private String callRMI(String attribute, int station, String value, boolean write) {
         switch (attribute) {
             case "index.html": 
-                return "404";
+                return askIndex();
             default:
                 return contactStation(attribute, station, value, write);
         }
@@ -171,6 +199,7 @@ public class ControllerThread extends Thread {
             }
         } catch (NumberFormatException e) {
             SocketHandling.escribeSocket(connection, "404");
+            System.err.println("Atributo numerico mal formateado\n");
             return;
         } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
             SocketHandling.escribeSocket(connection, "400");

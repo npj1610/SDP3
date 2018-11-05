@@ -26,9 +26,9 @@ public class HTTPHandling {
         return "HTTP/1.1 503 Service Unavailable\r\n"
                +"Connection: close\r\n"
                +"Content-Type: text/plain\r\n"
-               +"Content-Length: 63\r\n"
+               +"Content-Length: 45\r\n"
                +"Server: Practica 3 SD\r\n\r\n"
-               +"Maximum number of connections reached. Please try again later.\n"
+               +"Service unavailable. Please try again later.\n"
                 ;
     }
     

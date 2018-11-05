@@ -8,10 +8,12 @@ package Registrator;
 import Common.RegistratorInterface;
 import Common.RMIStationInterface;
 import java.io.Serializable;
+import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 /**
  *
@@ -24,9 +26,11 @@ public class Registrator extends UnicastRemoteObject implements Serializable, Re
     //Falta almacenar y cargar todas las estaciones
     
     Registry registry;
+    ArrayList<RMIStationInterface> RMIStations;
     
     public Registrator(Registry registro) throws RemoteException {
         registry = registro;
+        RMIStations = new ArrayList<>();
     }
     
     @Override
@@ -42,6 +46,28 @@ public class Registrator extends UnicastRemoteObject implements Serializable, Re
         }
         
         System.out.println("Registered: /"+rmiName+"\n");
+        RMIStations.add(RMIStation);
         return true;
+    }
+    
+    @Override
+    public String listRMIs() throws RemoteException {
+        String out = "";
+        
+        for(RMIStationInterface RMIStation : RMIStations) {
+            out += RMIStation.getName() + "\n<br>\n";
+        }
+        
+        return out;
+    }
+    
+    @Override
+    public void desregistrar(RMIStationInterface RMIStation) throws RemoteException {
+        try {
+            registry.unbind("/"+RMIStation.getName());
+            RMIStations.remove(RMIStation);
+        } catch (NotBoundException e) {
+            System.err.println("Station not bound!\n");
+        }
     }
 }

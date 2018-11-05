@@ -1,6 +1,7 @@
 package RMIStation;
 
 import Common.RMIStationInterface;
+import Common.RegistratorInterface;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,6 +11,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+
+// Then, somewhere in your code
+
 
 public class RMIStation extends UnicastRemoteObject implements Serializable, RMIStationInterface {
     

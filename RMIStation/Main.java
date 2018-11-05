@@ -14,6 +14,29 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+class ShutdownHook extends Thread
+{
+    RMIStationInterface station;
+    RegistratorInterface registrator;
+    
+    ShutdownHook (RMIStationInterface station, RegistratorInterface registrator) {
+        this.station = station;
+        this.registrator = registrator;
+    }
+    
+    @Override
+    public void run()
+    {
+        System.out.println("Cerrando");
+        try {
+            registrator.desregistrar(station);
+        } catch (RemoteException e) {
+            System.err.println("Error unbinding:");
+            System.err.println(e+"\n");
+        }
+    }
+}
+
 /**
  *
  * @author Niko
@@ -96,6 +119,8 @@ public class Main {
         //Register RMI
         try {
             RMIStationInterface rmiStation = new RMIStation(nombre, station);
+            
+            Runtime.getRuntime().addShutdownHook(new ShutdownHook(rmiStation, registrator));
             if(!registrator.registrar(rmiStation)) {
                 throw new RemoteException("Registrator returned false.\n");
             }
